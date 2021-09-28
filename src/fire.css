@@ -1,16 +1,35 @@
-.field_label {
-    width: 100px;
+
+
+.Field-label {
     margin-right: 12px;
+    color: antiquewhite;
+    grid-column: 1/2;
+    text-align: right;
 }
 
-.text_long {
-    width: 250px;
+.Text-long {
+    width:300px;
+    height: 20px;
+    font-size: .75em;
+    grid-column: 2/3;
+}
+
+.Text-medium {
     height: 30px;
     font-size: .75em;
 }
 
-.text_medium {
-    width: 150px;
-    height: 30px;
-    font-size: .75em;
+.Date {
+    width:130px;
+}
+
+.Input {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    grid-gap: 16px;
+    width:80vw;
+}
+
+.Spacer {
+    min-height:25px;
 }

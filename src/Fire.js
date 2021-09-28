@@ -1,27 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Input_Personal from './Input_Personal';
+import './fire.css';
 
-class Fire extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onPersonalChange = this.onPersonalChange.bind(this);
-        this.state = {
-            name: null,
-            partner: null
-        };
-    }
 
-    onPersonalChange(value) {
-        this.setState({ name: value });
-    }
+function saveValues(fireData) {
+    debugger;
+    localStorage.setItem("fireData", fireData)
+}
 
-    render() {
-        return (
-            <div>
-                <Input_Personal name={this.state.name} partner={this.state.partner} onPersonalChange={this.onPersonalChange} />
-            </div>
-        );
-    }
+function Fire () {
+    
+    //this.saveValues = () => {
+        // save data to localStorage 
+        //localStorage.setItem('state', JSON.stringify(this.state));
+    //}
+
+    //this.getStateFromLocalStorage = () => {
+        //let data = localStorage.getItem('state');
+        //if (data !== undefined) {
+//            this.setState(JSON.parse(data));
+  //      }
+    //}
+
+
+    return <>
+        <div>
+            <Input_Personal />
+
+            {/* <div>{fireData.name}</div>
+
+            <button onClick={() => saveValues(fireData)}>Save Values</button> */}
+        </div>
+    </>;
 }
 
 export default Fire;

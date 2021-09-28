@@ -5,12 +5,17 @@ import Fire from './Fire'
 
 function App() {
 
-  return (
+   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Fire />
+        <img src='./planner.png' className="App-logo" alt="logo" />
+        <div className="App-title">
+          Fire Calculator
+        </div>
       </header>
+      <div className="App-body">
+        <Fire />
+      </div>
     </div>
   );
 }
