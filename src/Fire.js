@@ -1,5 +1,5 @@
 import React from 'react';
-import Input_Personal from "./Input_Personal";
+import Input_Personal from './Input_Personal';
 
 class Fire extends React.Component {
     constructor(props) {
