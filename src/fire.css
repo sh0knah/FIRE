@@ -1,0 +1,16 @@
+.field_label {
+    width: 100px;
+    margin-right: 12px;
+}
+
+.text_long {
+    width: 250px;
+    height: 30px;
+    font-size: .75em;
+}
+
+.text_medium {
+    width: 150px;
+    height: 30px;
+    font-size: .75em;
+}
