@@ -1,7 +1,6 @@
 .Field-label {
     margin-right: 12px;
     color: antiquewhite;
-    grid-column: 1/2;
     text-align: right;
 }
 
@@ -9,7 +8,7 @@
     width: 300px;
     height: 20px;
     font-size: .75em;
-    grid-column: 2/3;
+    grid-column: 2;
 }
 
 .Text-medium {
@@ -35,8 +34,25 @@
     width: 80vw;
 }
 
+.G1 {
+    grid-column: 1;
+}
+
+.G2 {
+    grid-column: 2;
+}
+
+.G3 {
+    grid-column: 3;
+}
+
+.G4 {
+    grid-column: 4;
+}
+
+
 .Number-short {
-    width:100px;
+    width: 100px;
 }
 
 .Spacer {
@@ -63,7 +79,7 @@
 }
 
 .Currency-total {
-    color:antiquewhite;
-    text-align:right;
-    width:150px;
+    color: antiquewhite;
+    text-align: right;
+    width: 150px;
 }
