@@ -1,35 +1,32 @@
-import React, { useState } from 'react';
-import Input_Personal from './Input_Personal';
+import React from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
 import './fire.css';
+import 'react-tabs/style/react-tabs.css';
 
+import InputPersonal from './InputPersonal';
+import InputCurrentAssets from './InputCurrentAssets';
 
-function saveValues(fireData) {
-    debugger;
-    localStorage.setItem("fireData", fireData)
-}
 
 function Fire () {
-    
-    //this.saveValues = () => {
-        // save data to localStorage 
-        //localStorage.setItem('state', JSON.stringify(this.state));
-    //}
-
-    //this.getStateFromLocalStorage = () => {
-        //let data = localStorage.getItem('state');
-        //if (data !== undefined) {
-//            this.setState(JSON.parse(data));
-  //      }
-    //}
-
 
     return <>
         <div>
-            <Input_Personal />
+            <Tabs selectedTabClassName="Selected-tab">
+                <TabList className="Tab">
+                    <Tab>Personal Information</Tab>
+                    <Tab>Current Assets</Tab>
+                    <Tab>Plans</Tab>
+                    <Tab>Expectations</Tab>
+                    <Tab>Results</Tab>
+                </TabList>
 
-            {/* <div>{fireData.name}</div>
-
-            <button onClick={() => saveValues(fireData)}>Save Values</button> */}
+                <TabPanel><InputPersonal /></TabPanel>
+                <TabPanel><InputCurrentAssets /></TabPanel>
+                <TabPanel></TabPanel>
+                <TabPanel></TabPanel>
+                <TabPanel></TabPanel>
+            </Tabs>
         </div>
     </>;
 }
