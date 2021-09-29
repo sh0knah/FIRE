@@ -10,26 +10,26 @@ function InputCurrentAssets() {
         const initialValue = JSON.parse(saved);
         return initialValue ||
         {
-            taxableStocks: null,
-            taxableBonds: null,
-            taxableCash: null,
+            taxableStocks: 0,
+            taxableBonds: 0,
+            taxableCash: 0,
 
-            rothStocks: null,
-            rothBonds: null,
-            rothCash: null,
+            rothStocks: 0,
+            rothBonds: 0,
+            rothCash: 0,
 
-            taxDeferredStocks: null,
-            taxDeferredBonds: null,
-            taxDeferredCash: null
+            taxDeferredStocks: 0,
+            taxDeferredBonds: 0,
+            taxDeferredCash: 0
         }
     });
 
     const [totals, setTotals] = useState(() => {
         return {
-            taxableTotal: null,
-            rothTotal: null,
-            taxDeferredTotal: null,
-            portfolioTotal: null
+            taxableTotal: 0,
+            rothTotal: 0,
+            taxDeferredTotal: 0,
+            portfolioTotal: 0
         }
 
     });

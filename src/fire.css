@@ -35,6 +35,10 @@
     width: 80vw;
 }
 
+.Number-short {
+    width:100px;
+}
+
 .Spacer {
     min-height: 25px;
 }
