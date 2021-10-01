@@ -80,5 +80,3 @@ function InputCurrentAssets() {
 
 export default InputCurrentAssets
 
-/*
-*/

@@ -6,6 +6,9 @@ import 'react-tabs/style/react-tabs.css';
 
 import InputPersonal from './InputPersonal';
 import InputCurrentAssets from './InputCurrentAssets';
+import InputPlans from './InputPlans';
+import InputExpectations from './InputExpectations';
+import Results from './Results';
 
 
 function Fire () {
@@ -23,9 +26,9 @@ function Fire () {
 
                 <TabPanel><InputPersonal /></TabPanel>
                 <TabPanel><InputCurrentAssets /></TabPanel>
-                <TabPanel></TabPanel>
-                <TabPanel></TabPanel>
-                <TabPanel></TabPanel>
+                <TabPanel><InputPlans /></TabPanel>
+                <TabPanel><InputExpectations/></TabPanel>
+                <TabPanel><Results/></TabPanel>
             </Tabs>
         </div>
     </>;
