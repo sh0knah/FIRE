@@ -37,6 +37,12 @@ body {
     text-align:right;
 }
 
+.FireData-Table-Cell.Text {
+}
+.FireData-Table-Cell.Text > input {
+    width:98%
+}
+
 .Field-label {
     margin-right: 12px;
     text-align: right;
@@ -117,4 +123,11 @@ body {
 .Currency-total {
     text-align: right;
     width: 150px;
+}
+
+#Table-OnetimeContributions td:nth-child(1) {
+    width:110px;
+}
+#Table-OnetimeContributions td:nth-child(1n+3) {
+    width:100px;
 }

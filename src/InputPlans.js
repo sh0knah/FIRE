@@ -13,14 +13,7 @@ function InputPlans() {
         {
             rebalanceAnnually: 1,
 
-            onetimeEvents: [
-                {
-                    date: '10/31/2041',
-                    amountTaxable: 100000,
-                    amountRoth: 0,
-                    amountTaxDeferred: 0
-                }
-            ],
+            onetimeEvents: [],
 
             // TODO - Should this be a collection? Allow you to specify contributions during specific times?
             annualContributionsTaxable: 10000,
@@ -48,15 +41,48 @@ function InputPlans() {
 
     }, [state])
 
+    function handleAdd() {
+        const date = document.getElementById("ContributionDate").value;
+        const description = document.getElementById("ContributionDescription").value;
+        const taxable = document.getElementById("ContributionTaxable").value === "" ? 0 : document.getElementById("ContributionTaxable").value * 1;
+        const roth = document.getElementById("ContributionRoth").value === "" ? 0 : document.getElementById("ContributionRoth").value * 1;
+        const taxDeferred = document.getElementById("ContributionTaxDeferred").value === "" ? 0 : document.getElementById("ContributionTaxDeferred").value * 1;
+
+        const newRow = {
+            date: date,
+            description: description,
+            amountTaxable: taxable,
+            amountRoth: roth,
+            amountTaxDeferred: taxDeferred
+        };
+        const events = state.onetimeEvents.concat(newRow).sort((first, second) => { return first.date > second.date });
+        setState({
+            ...state,
+            onetimeEvents: 
+                events 
+        });
+    };
+
+    function handleRemove(index) {
+        const events = state.onetimeEvents.splice(index, 1).sort((first, second) => { return first.date < second.date });
+        setState({
+            ...state,
+            oneTimeEvents: {
+                events
+            }
+        });
+    };
+
     return (
         <div id="InputPlans" className="Input">
             <div id="FutureContributions" className="Section-Body">
                 <div className="Section-Label">Future Contributions</div>
                 <div className="Section-Subsection">
-                    <table className="FireData-Table">
+                    <table id="Table-OnetimeContributions" className="FireData-Table">
                         <thead>
                             <tr>
                                 <th className="FireData-Table-Header">Date</th>
+                                <th className="FireData-Table-Header">Description</th>
                                 <th className="FireData-Table-Header">Amount Taxable</th>
                                 <th className="FireData-Table-Header">Amount Roth</th>
                                 <th className="FireData-Table-Header">Amount Tax Deferred</th>
@@ -64,14 +90,15 @@ function InputPlans() {
                             </tr>
                         </thead>
                         <tbody>
-                        {state.onetimeEvents.map(event => {
+                            {state.onetimeEvents.map(function (event, index) {
                             return (
-                                <tr key="event">
+                                <tr key={index}>
                                     <td className="FireData-Table-Cell" >{ event.date }</td>
+                                    <td className="FireData-Table-Cell" >{ event.description }</td>
                                     <td className="FireData-Table-Cell Amount">{ event.amountTaxable.toLocaleString('en') }</td>
                                     <td className="FireData-Table-Cell Amount">{ event.amountRoth.toLocaleString('en') }</td>
                                     <td className="FireData-Table-Cell Amount">{event.amountTaxDeferred.toLocaleString('en')}</td>
-                                    <td></td>
+                                    <td className="FireData-Table-Cell"><button id="btnRemoveContribution" onClick={() => handleRemove(index)}>Remove</button></td>
                                 </tr>
                             )
                         })}
@@ -79,10 +106,11 @@ function InputPlans() {
                         <tfoot>
                             <tr>
                                 <th className="FireData-Table-Cell"><input type="date" id="ContributionDate" /></th>
+                                <th className="FireData-Table-Cell Text"><input type="test" id="ContributionDescription" /></th>
                                 <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionTaxable" /></th>
                                 <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionRoth" /></th>
                                 <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionTaxDeferred" /></th>
-                                <th className="FireData-Table-Cell"><button id="btnAddContribution">Add</button></th>
+                                <th className="FireData-Table-Cell"><button id="btnAddContribution" onClick={handleAdd}>Add</button></th>
                             </tr>
                         </tfoot>
                     </table>
