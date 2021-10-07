@@ -15,8 +15,8 @@ function InputPlans() {
 
             onetimeEvents: [
                 {
-                    date: null,
-                    amountTaxable: 0,
+                    date: '10/31/2041',
+                    amountTaxable: 100000,
                     amountRoth: 0,
                     amountTaxDeferred: 0
                 }
@@ -50,7 +50,44 @@ function InputPlans() {
 
     return (
         <div id="InputPlans" className="Input">
-
+            <div id="FutureContributions" className="Section-Body">
+                <div className="Section-Label">Future Contributions</div>
+                <div className="Section-Subsection">
+                    <table className="FireData-Table">
+                        <thead>
+                            <tr>
+                                <th className="FireData-Table-Header">Date</th>
+                                <th className="FireData-Table-Header">Amount Taxable</th>
+                                <th className="FireData-Table-Header">Amount Roth</th>
+                                <th className="FireData-Table-Header">Amount Tax Deferred</th>
+                                <th className="FireData-Table-Header">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {state.onetimeEvents.map(event => {
+                            return (
+                                <tr key="event">
+                                    <td className="FireData-Table-Cell" >{ event.date }</td>
+                                    <td className="FireData-Table-Cell Amount">{ event.amountTaxable.toLocaleString('en') }</td>
+                                    <td className="FireData-Table-Cell Amount">{ event.amountRoth.toLocaleString('en') }</td>
+                                    <td className="FireData-Table-Cell Amount">{event.amountTaxDeferred.toLocaleString('en')}</td>
+                                    <td></td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th className="FireData-Table-Cell"><input type="date" id="ContributionDate" /></th>
+                                <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionTaxable" /></th>
+                                <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionRoth" /></th>
+                                <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionTaxDeferred" /></th>
+                                <th className="FireData-Table-Cell"><button id="btnAddContribution">Add</button></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
     )
 }

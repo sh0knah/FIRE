@@ -1,6 +1,44 @@
+body {
+    color:antiquewhite;
+}
+
+.Section-Body {
+    margin: 6px 36px;
+    width: 100vw;
+}
+
+.Section-Label {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.Section-Subsection {
+    margin:6px;
+}
+
+.FireData-Table {
+    width: 80vw;
+    border-collapse: collapse;
+}
+
+.FireData-Table-Header {
+    text-align: center;
+}
+
+.FireData-Table, .FireData-Table-Header, .FireData-Table-Cell {
+    border: 1px solid antiquewhite;
+}
+
+.FireData-Table-Header, .FireData-Table-Cell {
+    padding:6px 12px;
+}
+
+.FireData-Table-Cell.Amount {
+    text-align:right;
+}
+
 .Field-label {
     margin-right: 12px;
-    color: antiquewhite;
     text-align: right;
 }
 
@@ -66,7 +104,6 @@
     list-style: none;
     padding: 6px 12px;
     cursor: pointer;
-    color: antiquewhite;
 }
 
 .Selected-tab {
@@ -74,12 +111,10 @@
     border-bottom: 1px solid !important;
     background-color: #282c34;
     border-color: rgba(250, 235, 215, 1) !important;
-    color: antiquewhite;
     border-radius: 5px 5px 0 0;
 }
 
 .Currency-total {
-    color: antiquewhite;
     text-align: right;
     width: 150px;
 }
