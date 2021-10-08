@@ -20,10 +20,10 @@ function InputPlans() {
             annualContributionsRoth: 0,
             annualContributionsTaxDeferred: 20000,
 
-            withdrawalStartYear: 2027,
-            withdrawalAmount: 100000,
+            expendituresStartYear: 2027,
+            expendituresAmount: 100000,
 
-            withdrawalAdjustments: [
+            expendituresAdjustments: [
                 {
                     startYear: null,
                     percentAdjustment: 0

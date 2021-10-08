@@ -48,7 +48,24 @@ body {
 }
 
 .FireData-Table-Cell.Text>input {
-    width: 98%
+    width: 98%;
+}
+
+.Output-Chart {
+    width:80vw;
+    margin: 0 auto;
+}
+
+.Output-Table {
+    margin:24px;
+}
+.Output-Table table,td {
+    border:1px antiquewhite solid;
+    padding:6px 18px;
+    border-collapse: collapse;
+}
+.Output-Table .Amount {
+    text-align: right;
 }
 
 .Field-label {

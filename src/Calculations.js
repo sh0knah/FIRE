@@ -2,8 +2,6 @@
 
 function modelResults(personal, currentAssets, plan, expectations) {
 
-
-    debugger;
     const startYear = new Date().getFullYear();
 
     const age_Self = startYear - personal.dob;
@@ -11,14 +9,14 @@ function modelResults(personal, currentAssets, plan, expectations) {
     const lifeExpectancy_Self = personal.lifeExpectancy;
     const planLength_Self = lifeExpectancy_Self - age_Self;
 
-    const age_Partner = startYear - personal.dob_Parter;
-    const retirementYear_Partner = personal.regoal_Partner;
+    const age_Partner = startYear - personal.dob_Partner;
+    //const retirementYear_Partner = personal.regoal_Partner;
     const lifeExpectancy_Partner = personal.lifeExpectancy_Partner;
     const planLength_Partner = lifeExpectancy_Partner - age_Partner;
 
-    const withdrawalYear = plan.withdrawalYear;
+    const expendituresYear = plan.expendituresStartYear;
     const planLength = planLength_Self > planLength_Partner ? planLength_Self : planLength_Partner;
-    const endYear = startYear + planLength;
+    //const endYear = startYear + planLength;
 
     const startTaxableStocks = +currentAssets.taxableStocks;
     const startRothStocks = +currentAssets.rothStocks;
@@ -31,6 +29,8 @@ function modelResults(personal, currentAssets, plan, expectations) {
     const returnIndexStart = 1;
     const numberOfIterations = 50;
 
+    // TODO -- account for taxes on withdrawals / taxable accounts
+
     let iterations = [];
     for (let i = 0; i < numberOfIterations; i++) {
 
@@ -38,46 +38,63 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
         var iterationResults = [];
 
-        let taxableStocks = startTaxableStocks;
-        let rothStocks = startRothStocks;
-        let taxDeferredStocks = startTaxDeferredStocks;
+        // TODO - don't combine these yet. 
+        //  Start with the value from the person who will be eligible for withdrawals first.
+        //  Then add the other partner when they are eligible.
+        let taxableStocks = startTaxableStocks + startTaxableStocks_Partner;
+        let rothStocks = startRothStocks + startRothStocks_Partner;
+        let taxDeferredStocks = startTaxDeferredStocks + startTaxDeferredStocks_Partner;
 
-        let taxableStocks_Partner = startTaxableStocks_Partner;
-        let rothStocks_Partner = startRothStocks_Partner;
-        let taxDeferredStocks_Partner = startTaxDeferredStocks_Partner;
-
+        let expenditures = 0; // We'll set this later.
+        let pensionAmount = 0;
+        let socialSecurityAmount = 0;
+        let overspend = 0;
 
         // TODO - ask the user if it's OK to "wrap around?" If not, what? Assume fixed rate of return? Randomize?
         for (let yearIdx = 0; yearIdx < planLength; yearIdx++) {
 
             let year = startYear + yearIdx;
-            let withdrawal = plan.withdrawalAmount;
 
-            console.log("calculation year: " + year);
-            console.log("historic return year: " + returnIndex + firstHistoryYear);
+            // console.log("calculation year: " + year);
+            // console.log("historic return year: " + returnIndex + firstHistoryYear);
+            // console.log("historic return amount: " + stockResults[returnIndex]);
 
             if (returnIndex >= stockResults.length)
                 returnIndex = 0;
 
-            // TODO - calculate return on bonds and cash
-            const stockReturn = stockResults[returnIndex];
-            taxableStocks = taxableStocks * (1 + stockReturn);
-            rothStocks = rothStocks * (1 + stockReturn);
-            taxDeferredStocks = taxDeferredStocks * (1 + stockReturn);
+            for (let p = 0; p < expectations.pensions.length; p++) {
+                if (expectations.pensions[p].startYear === year) {
+                    pensionAmount += expectations.pensions[p].annualAmount;
 
-            taxableStocks_Partner = taxableStocks_Partner * (1 + stockReturn);
-            rothStocks_Partner = rothStocks_Partner * (1 + stockReturn);
-            taxDeferredStocks_Partner = taxDeferredStocks_Partner * (1 + stockReturn);
-
-            // Assume contribution at the end of the year (after return is calculated)
-            if (year < retirementYear_Self) // TODO - account for where in the year the retirement occurs
-            {
-                taxableStocks += plan.annualContributionsTaxable;
-                rothStocks += plan.annualContributionsRoth;
-                taxDeferredStocks += plan.annualContributionsTaxDeferred;
+                    // TODO - account for death scenarios
+                }
             }
 
-            if (year > withdrawalYear) {
+            for (let s = 0; s < expectations.socialSecurity.length; s++) {
+                if (expectations.socialSecurity[s].startYear === year) {
+                    socialSecurityAmount += expectations.socialSecurity[s].annualAmount;
+
+                    // TODO - account for death scenarios
+                }
+            }
+
+            if (year < expendituresYear) {
+                expenditures = 0; // No retirement expenditures yet.
+            }
+            else if (year === expendituresYear) {
+                expenditures = plan.expendituresAmount; // Start expenditures at this amount.
+            }
+            // TODO - account for expenditure adjustments over time
+
+            // Figure the withdrawals before the increase. It's safer.
+            // Cover expenditures from SS and Pension first, then withdraw with is necessary from accounts.
+            let withdrawal = expenditures - (pensionAmount + socialSecurityAmount);
+            if (withdrawal < 0) {
+                // put any remaining amount into taxable investments.
+                // using a negative value so that we subtract a negative - adding to savings.
+                taxableStocks -= withdrawal;
+            }
+            else {
                 // TODO - determine order of withdrawals
                 // currently: empty taxable accounts first, then roth, then taxdeferred.
                 // should be: based on tax rules to minimize tax impact.
@@ -107,18 +124,48 @@ function modelResults(personal, currentAssets, plan, expectations) {
                     withdrawal -= taxDeferredStocks;
                     taxDeferredStocks = 0;
                 }
-
-
+            }
+            if (withdrawal > 0) {
+                overspend += withdrawal;
             }
 
+            // Add one-time contributions / withdrawals
+            for (let c = 0; c < plan.onetimeEvents.length; c++) {
+                if (plan.onetimeEvents[c].year == year) {
+                    taxableStocks += plan.onetimeEvents[c].amountTaxable;
+                    rothStocks += plan.onetimeEvents[c].amountRoth;
+                    taxableStocks += plan.onetimeEvents[c].amountTaxable;
+                }
+            }
+
+            // TODO - calculate return on bonds and cash
+            const stockReturn = stockResults[returnIndex];
+            taxableStocks = taxableStocks * (1 + stockReturn);
+            rothStocks = rothStocks * (1 + stockReturn);
+            taxDeferredStocks = taxDeferredStocks * (1 + stockReturn);
+
+            // taxableStocks_Partner = taxableStocks_Partner * (1 + stockReturn);
+            // rothStocks_Partner = rothStocks_Partner * (1 + stockReturn);
+            // taxDeferredStocks_Partner = taxDeferredStocks_Partner * (1 + stockReturn);
+
+            // Assume contribution at the end of the year (after return is calculated)
+            // TODO - account for different retirement years for each person
+            // TODO - account for possibility that contributions are still being made after retirement
+            if (year < retirementYear_Self)
+            {
+                taxableStocks += plan.annualContributionsTaxable;
+                rothStocks += plan.annualContributionsRoth;
+                taxDeferredStocks += plan.annualContributionsTaxDeferred;
+            }
+
+            iterationResults.push({ year: year, value: taxDeferredStocks + taxableStocks + rothStocks - overspend });
             returnIndex++;
-            iterationResults.push(taxDeferredStocks);
 
         }
-        console.log("==============");
-        iterations.push(iterationResults);
+        const endAmount = iterationResults[iterationResults.length - 1].value;
+        iterations.push({ success: (endAmount > 0), results: iterationResults });
     }
-    debugger;
+    return iterations;
 }
 
 const firstHistoryYear = 1915;

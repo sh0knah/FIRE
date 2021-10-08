@@ -27,7 +27,7 @@ function InputExpectations() {
                 {
                     owner: '',
                     startYear: null,
-                    amount: 0,
+                    annualAmount: 0,
                     expectedPercentage: 1 // use percentage to indicate expected payout reductions
                 }
             ],
