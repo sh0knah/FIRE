@@ -76,7 +76,8 @@ function InputPlans() {
     return (
         <div id="InputPlans" className="Input">
             <div id="FutureContributions" className="Section-Body">
-                <div className="Section-Label">Future Contributions</div>
+                <div className="Section-Label">One-time Contributions / Withdrawals</div>
+                <div className="Section-Instructions">Enter negative numbers for withdrawals</div>
                 <div className="Section-Subsection">
                     <table id="Table-OnetimeContributions" className="FireData-Table">
                         <thead>

@@ -1,5 +1,5 @@
 body {
-    color:antiquewhite;
+    color: antiquewhite;
 }
 
 .Section-Body {
@@ -10,10 +10,17 @@ body {
 .Section-Label {
     font-size: 1.1em;
     font-weight: bold;
+    margin:12px 0 24px 0;
 }
 
 .Section-Subsection {
-    margin:6px;
+    margin: 6px;
+}
+
+.Section-Instructions {
+    margin:12px 0 24px 24px;
+    font-size:0.75em;
+    font-style: italic;
 }
 
 .FireData-Table {
@@ -25,22 +32,23 @@ body {
     text-align: center;
 }
 
-.FireData-Table, .FireData-Table-Header, .FireData-Table-Cell {
+.FireData-Table,
+.FireData-Table-Header,
+.FireData-Table-Cell {
     border: 1px solid antiquewhite;
 }
 
-.FireData-Table-Header, .FireData-Table-Cell {
-    padding:6px 12px;
+.FireData-Table-Header,
+.FireData-Table-Cell {
+    padding: 6px 12px;
 }
 
 .FireData-Table-Cell.Amount {
-    text-align:right;
+    text-align: right;
 }
 
-.FireData-Table-Cell.Text {
-}
-.FireData-Table-Cell.Text > input {
-    width:98%
+.FireData-Table-Cell.Text>input {
+    width: 98%
 }
 
 .Field-label {
@@ -71,12 +79,26 @@ body {
     width: 130px;
 }
 
-.Input {
+.Grid4 {
     display: grid;
     grid-template-columns: 230px 1fr;
     grid-gap: 16px;
     width: 80vw;
 }
+
+.Grid2 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 16px;
+    width:80vw;
+}
+
+.SubGrid2 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 16px;
+}
+
 
 .G1 {
     grid-column: 1;
@@ -126,8 +148,9 @@ body {
 }
 
 #Table-OnetimeContributions td:nth-child(1) {
-    width:110px;
+    width: 110px;
 }
+
 #Table-OnetimeContributions td:nth-child(1n+3) {
-    width:100px;
+    width: 100px;
 }
