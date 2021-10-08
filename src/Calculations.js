@@ -5,9 +5,13 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
     debugger;
     const startYear = new Date().getFullYear();
-    const age = startYear - (new Date(personal.dob).getFullYear());
-    const retirementYear = new Date(personal.regoal).getFullYear();
-    const withdrawalYear = new Date(plan.withdrawalStartDate).getFullYear();
+    const age = startYear - personal.dob;
+    const retirementYear = personal.regoal;
+
+    const age_Partner = startYear - personal.dob_Parter;
+    const retirementYear_Partner = personal.regoal_Partner;
+
+    const withdrawalYear = plan.withdrawalYear;
     const lifeExpectancy = personal.lifeExpectancy;
     const planLength = lifeExpectancy - age;
     const endYear = startYear + planLength;
