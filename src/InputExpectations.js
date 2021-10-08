@@ -14,8 +14,8 @@ function InputExpectations() {
             pensions: [
                 {
                     owner: '',
-                    startYear: null,
-                    annualAmount: 0,
+                    startYear: 2039,
+                    annualAmount: 13488,
                     //inflationIncreases: 0,
                     onDeath: {
                         payout: 0,
@@ -26,8 +26,14 @@ function InputExpectations() {
             socialSecurity: [
                 {
                     owner: '',
-                    startYear: null,
-                    annualAmount: 0,
+                    startYear: 2039,
+                    annualAmount: 38136,
+                    expectedPercentage: 1 // use percentage to indicate expected payout reductions
+                },
+                {
+                    owner: '',
+                    startYear: 2041,
+                    annualAmount: 33288,
                     expectedPercentage: 1 // use percentage to indicate expected payout reductions
                 }
             ],
