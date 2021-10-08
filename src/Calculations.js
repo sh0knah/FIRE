@@ -5,49 +5,72 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
     debugger;
     const startYear = new Date().getFullYear();
-    const age = startYear - personal.dob;
-    const retirementYear = personal.regoal;
+
+    const age_Self = startYear - personal.dob;
+    const retirementYear_Self = personal.regoal;
+    const lifeExpectancy_Self = personal.lifeExpectancy;
+    const planLength_Self = lifeExpectancy_Self - age_Self;
 
     const age_Partner = startYear - personal.dob_Parter;
     const retirementYear_Partner = personal.regoal_Partner;
+    const lifeExpectancy_Partner = personal.lifeExpectancy_Partner;
+    const planLength_Partner = lifeExpectancy_Partner - age_Partner;
 
     const withdrawalYear = plan.withdrawalYear;
-    const lifeExpectancy = personal.lifeExpectancy;
-    const planLength = lifeExpectancy - age;
+    const planLength = planLength_Self > planLength_Partner ? planLength_Self : planLength_Partner;
     const endYear = startYear + planLength;
 
-    let startTaxableStocks = +currentAssets.taxableStocks;
-    let startRothStocks = +currentAssets.rothStocks;
-    let startTaxDeferredStocks = +currentAssets.taxDeferredStocks;
+    const startTaxableStocks = +currentAssets.taxableStocks;
+    const startRothStocks = +currentAssets.rothStocks;
+    const startTaxDeferredStocks = +currentAssets.taxDeferredStocks;
 
-    const returnIndexStart = 25;
+    const startTaxableStocks_Partner = +currentAssets.taxableStocks_Partner;
+    const startRothStocks_Partner = +currentAssets.rothStocks_Partner;
+    const startTaxDeferredStocks_Partner = +currentAssets.taxDeferredStocks_Partner;
+
+    const returnIndexStart = 1;
+    const numberOfIterations = 50;
 
     let iterations = [];
-    for (let i = 0; i < 20; i++) {
-        let returnIndex = returnIndexStart + i; // Got through a different set of years each time
+    for (let i = 0; i < numberOfIterations; i++) {
+
+        let returnIndex = returnIndexStart + i; // Go through a different set of years each time
 
         var iterationResults = [];
+
         let taxableStocks = startTaxableStocks;
         let rothStocks = startRothStocks;
         let taxDeferredStocks = startTaxDeferredStocks;
 
+        let taxableStocks_Partner = startTaxableStocks_Partner;
+        let rothStocks_Partner = startRothStocks_Partner;
+        let taxDeferredStocks_Partner = startTaxDeferredStocks_Partner;
+
 
         // TODO - ask the user if it's OK to "wrap around?" If not, what? Assume fixed rate of return? Randomize?
         for (let yearIdx = 0; yearIdx < planLength; yearIdx++) {
+
             let year = startYear + yearIdx;
-            console.log("returnIndex: " + returnIndex);
             let withdrawal = plan.withdrawalAmount;
+
+            console.log("calculation year: " + year);
+            console.log("historic return year: " + returnIndex + firstHistoryYear);
 
             if (returnIndex >= stockResults.length)
                 returnIndex = 0;
 
+            // TODO - calculate return on bonds and cash
             const stockReturn = stockResults[returnIndex];
             taxableStocks = taxableStocks * (1 + stockReturn);
             rothStocks = rothStocks * (1 + stockReturn);
             taxDeferredStocks = taxDeferredStocks * (1 + stockReturn);
 
+            taxableStocks_Partner = taxableStocks_Partner * (1 + stockReturn);
+            rothStocks_Partner = rothStocks_Partner * (1 + stockReturn);
+            taxDeferredStocks_Partner = taxDeferredStocks_Partner * (1 + stockReturn);
+
             // Assume contribution at the end of the year (after return is calculated)
-            if (year < retirementYear) // TODO - account for where in the year the retirement occurs
+            if (year < retirementYear_Self) // TODO - account for where in the year the retirement occurs
             {
                 taxableStocks += plan.annualContributionsTaxable;
                 rothStocks += plan.annualContributionsRoth;
@@ -98,6 +121,8 @@ function modelResults(personal, currentAssets, plan, expectations) {
     debugger;
 }
 
+const firstHistoryYear = 1915;
+const numHistoryYears = 107;
 const stockResults = [ // 1915-2021
     0.8149,
     -0.0419,
