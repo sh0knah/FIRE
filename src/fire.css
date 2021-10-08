@@ -75,8 +75,8 @@ body {
     text-align: right;
 }
 
-.Date {
-    width: 130px;
+.Year {
+    width: 90px;
 }
 
 .Grid4 {
@@ -147,8 +147,8 @@ body {
     width: 150px;
 }
 
-#Table-OnetimeContributions td:nth-child(1) {
-    width: 110px;
+#Table-OnetimeContributions td:nth-child(2) {
+    width: 280px;
 }
 
 #Table-OnetimeContributions td:nth-child(1n+3) {

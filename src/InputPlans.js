@@ -20,12 +20,12 @@ function InputPlans() {
             annualContributionsRoth: 0,
             annualContributionsTaxDeferred: 20000,
 
-            withdrawalStartDate: '03/22/2027',
+            withdrawalStartYear: 2027,
             withdrawalAmount: 100000,
 
             withdrawalAdjustments: [
                 {
-                    startDate: null,
+                    startYear: null,
                     percentAdjustment: 0
                 }
             ],
@@ -42,29 +42,29 @@ function InputPlans() {
     }, [state])
 
     function handleAdd() {
-        const date = document.getElementById("ContributionDate").value;
+        const year = document.getElementById("ContributionYear").value;
         const description = document.getElementById("ContributionDescription").value;
-        const taxable = document.getElementById("ContributionTaxable").value === "" ? 0 : document.getElementById("ContributionTaxable").value * 1;
-        const roth = document.getElementById("ContributionRoth").value === "" ? 0 : document.getElementById("ContributionRoth").value * 1;
-        const taxDeferred = document.getElementById("ContributionTaxDeferred").value === "" ? 0 : document.getElementById("ContributionTaxDeferred").value * 1;
+        const taxable = document.getElementById("ContributionTaxable").value === "" ? 0 : +document.getElementById("ContributionTaxable").value;
+        const roth = document.getElementById("ContributionRoth").value === "" ? 0 : +document.getElementById("ContributionRoth").value;
+        const taxDeferred = document.getElementById("ContributionTaxDeferred").value === "" ? 0 : +document.getElementById("ContributionTaxDeferred").value;
 
         const newRow = {
-            date: date,
+            year: year,
             description: description,
             amountTaxable: taxable,
             amountRoth: roth,
             amountTaxDeferred: taxDeferred
         };
-        const events = state.onetimeEvents.concat(newRow).sort((first, second) => { return first.date > second.date });
+        const events = state.onetimeEvents.concat(newRow).sort((first, second) => { return first.year > second.year });
         setState({
             ...state,
-            onetimeEvents: 
-                events 
+            onetimeEvents:
+                events
         });
     };
 
     function handleRemove(index) {
-        const events = state.onetimeEvents.splice(index, 1).sort((first, second) => { return first.date < second.date });
+        const events = state.onetimeEvents.splice(index, 1).sort((first, second) => { return first.year < second.year });
         setState({
             ...state,
             oneTimeEvents: {
@@ -82,7 +82,7 @@ function InputPlans() {
                     <table id="Table-OnetimeContributions" className="FireData-Table">
                         <thead>
                             <tr>
-                                <th className="FireData-Table-Header">Date</th>
+                                <th className="FireData-Table-Header">Year</th>
                                 <th className="FireData-Table-Header">Description</th>
                                 <th className="FireData-Table-Header">Amount Taxable</th>
                                 <th className="FireData-Table-Header">Amount Roth</th>
@@ -94,7 +94,7 @@ function InputPlans() {
                             {state.onetimeEvents.map(function (event, index) {
                             return (
                                 <tr key={index}>
-                                    <td className="FireData-Table-Cell" >{ event.date }</td>
+                                    <td className="FireData-Table-Cell Year" >{ event.year }</td>
                                     <td className="FireData-Table-Cell" >{ event.description }</td>
                                     <td className="FireData-Table-Cell Amount">{ event.amountTaxable.toLocaleString('en') }</td>
                                     <td className="FireData-Table-Cell Amount">{ event.amountRoth.toLocaleString('en') }</td>
@@ -106,7 +106,7 @@ function InputPlans() {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th className="FireData-Table-Cell"><input type="date" id="ContributionDate" /></th>
+                                <th className="FireData-Table-Cell"><input type="year" id="ContributionYear" /></th>
                                 <th className="FireData-Table-Cell Text"><input type="test" id="ContributionDescription" /></th>
                                 <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionTaxable" /></th>
                                 <th className="FireData-Table-Cell Amount"><input type="number" id="ContributionRoth" /></th>

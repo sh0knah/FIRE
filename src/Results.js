@@ -43,7 +43,7 @@ function Results() {
 
         onetimeEvents: [
             {
-                date: null,
+                year: null,
                 amountTaxable: 0,
                 amountRoth: 0,
                 amountTaxDeferred: 0
@@ -54,12 +54,12 @@ function Results() {
         annualContributionsRoth: 0,
         annualContributionsTaxDeferred: 0,
 
-        withdrawalStartDate: null,
+        withdrawalStartYear: null,
         withdrawalAmount: 0,
 
         withdrawalAdjustments: [
             {
-                startDate: null,
+                startYear: null,
                 percentAdjustment: 0
             }
         ],
@@ -72,7 +72,7 @@ function Results() {
         pensions: [
             {
                 owner: '',
-                startDate: null,
+                startYear: null,
                 annualAmount: 0,
                 //inflationIncreases: 0,
                 onDeath: {
@@ -84,14 +84,14 @@ function Results() {
         socialSecurity: [
             {
                 owner: '',
-                startDate: null,
+                startYear: null,
                 amount: 0,
                 expectedPercentage: 1 // use percentage to indicate expected payout reductions
             }
         ],
         taxRates: [
             {
-                startDate: null,
+                startYear: null,
                 brackets: [
                     {
                         earningsUpTo: 50000,
