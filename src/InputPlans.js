@@ -15,7 +15,6 @@ function InputPlans() {
 
             onetimeEvents: [],
 
-            // TODO - Should this be a collection? Allow you to specify contributions during specific times?
             annualContributions: [],
 
             expenditures: [],
@@ -58,7 +57,7 @@ function InputPlans() {
         events.splice(index, 1).sort((first, second) => { return first.year < second.year });
         setState({
             ...state,
-            oneTimeEvents: {
+            onetimeEvents: {
                 events
             }
         });
@@ -78,9 +77,9 @@ function InputPlans() {
             endYear: +endYear,
             owner: owner,
             description: description,
-            amountTaxable: taxable,
-            amountRoth: roth,
-            amountTaxDeferred: taxDeferred
+            amountTaxable: +taxable,
+            amountRoth: +roth,
+            amountTaxDeferred: +taxDeferred
         };
         const events = state.annualContributions.concat(newRow).sort((first, second) => { return first.year > second.year });
         setState({
@@ -107,7 +106,7 @@ function InputPlans() {
         const newRow = {
             year: +year,
             description: description,
-            expenses: expenses
+            expenses: +expenses
         };
         const expenditures = state.expenditures.concat(newRow).sort((first, second) => { return first.year > second.year });
         setState({

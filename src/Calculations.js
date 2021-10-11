@@ -104,14 +104,14 @@ function modelResults(personal, currentAssets, plan, expectations) {
                 }
             }
 
-            for (let s = 0; s < expectations.socialSecurity.length; s++) {
-                if (+(expectations.socialSecurity[s].startYear) === year) {
-                    socialSecurityAmount += expectations.socialSecurity[s].annualAmount;
-
-                    // TODO - account for death scenarios
-                }
+            // TODO - account for death scenarios
+            if (year === +(expectations.ssyear)) {
+                socialSecurityAmount += expectations.ssamount;
             }
-
+            if (year === +(expectations.ssyear_Partner)) {
+                socialSecurityAmount += expectations.ssamount_Partner;
+            }
+            
             for (let s = 0; s < plan.expenditures.length; s++) {
                 if (+(plan.expenditures[s].year) === year) {
                     expenditures = plan.expenditures[s].expenses;
