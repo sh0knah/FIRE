@@ -150,7 +150,7 @@ function Results() {
         }
     }
 
-    let successPercent = (success / iterations.length) * 100;
+    let successPercent = ((success / iterations.length) * 100).toPrecision(3);
 
     return (
         <div id="Results" className="Output-Chart">

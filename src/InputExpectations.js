@@ -11,6 +11,12 @@ function InputExpectations() {
         const initialValue = JSON.parse(saved);
         return initialValue ||
         {
+            inflationRates: [
+                {
+                    startYear: 2021,
+                    rate: .03
+                }
+            ],
             pensions: [
                 {
                     owner: '',

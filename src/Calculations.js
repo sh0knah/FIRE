@@ -1,5 +1,38 @@
 
 
+function calculateWithdrawal(taxRateTable, expenditures) {
+    if (expenditures === 0) {
+        return 0;
+    }
+
+    let incomeAtBracket = taxRateTable.deductions;
+    let netAtBracket = incomeAtBracket;
+    let totalNet = netAtBracket;
+    let totalGross = totalNet;
+    let netRemaining = expenditures - incomeAtBracket;
+
+    for (let b = 0; b < taxRateTable.brackets.length; b++) {
+        let rate = taxRateTable.brackets[b].rate;
+        const grossRemainingAtNextBracket = netRemaining / (1 - rate);
+        if (b === 0) {
+            incomeAtBracket = taxRateTable.brackets[b].earningsUpTo;
+        } else if (b === taxRateTable.brackets.length - 1) {
+            incomeAtBracket = grossRemainingAtNextBracket;
+        }
+        else {
+            incomeAtBracket = Math.min(grossRemainingAtNextBracket,
+                taxRateTable.brackets[b].earningsUpTo - taxRateTable.brackets[b - 1].earningsUpTo);
+        }
+
+        netAtBracket = incomeAtBracket - (incomeAtBracket * rate);
+        totalNet += netAtBracket;
+        totalGross += incomeAtBracket;
+        netRemaining -= netAtBracket;
+    }
+
+    return totalGross;
+}
+
 function modelResults(personal, currentAssets, plan, expectations) {
 
     const startYear = new Date().getFullYear();
@@ -14,7 +47,6 @@ function modelResults(personal, currentAssets, plan, expectations) {
     const lifeExpectancy_Partner = personal.lifeExpectancy_Partner;
     const planLength_Partner = lifeExpectancy_Partner - age_Partner;
 
-    const expendituresYear = plan.expendituresStartYear;
     const planLength = planLength_Self > planLength_Partner ? planLength_Self : planLength_Partner;
     //const endYear = startYear + planLength;
 
@@ -28,8 +60,6 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
     const returnIndexStart = 1;
     const numberOfIterations = 50;
-
-    // TODO -- account for taxes on withdrawals / taxable accounts
 
     let iterations = [];
     for (let i = 0; i < numberOfIterations; i++) {
@@ -54,6 +84,10 @@ function modelResults(personal, currentAssets, plan, expectations) {
         let annualContributionsRoth = 0;
         let annualContributionsTaxDeferred = 0;
 
+        let inflationRate = 0.0324;
+
+        let taxRateTable = [];
+
         // TODO - ask the user if it's OK to "wrap around?" If not, what? Assume fixed rate of return? Randomize?
         for (let yearIdx = 0; yearIdx < planLength; yearIdx++) {
 
@@ -63,7 +97,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
                 returnIndex = 0;
 
             for (let p = 0; p < expectations.pensions.length; p++) {
-                if (expectations.pensions[p].startYear === year) {
+                if (+(expectations.pensions[p].startYear) === year) {
                     pensionAmount += expectations.pensions[p].annualAmount;
 
                     // TODO - account for death scenarios
@@ -71,7 +105,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             for (let s = 0; s < expectations.socialSecurity.length; s++) {
-                if (expectations.socialSecurity[s].startYear === year) {
+                if (+(expectations.socialSecurity[s].startYear) === year) {
                     socialSecurityAmount += expectations.socialSecurity[s].annualAmount;
 
                     // TODO - account for death scenarios
@@ -79,14 +113,29 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             for (let s = 0; s < plan.expenditures.length; s++) {
-                if (plan.expenditures[s].year === year) {
+                if (+(plan.expenditures[s].year) === year) {
                     expenditures = plan.expenditures[s].expenses;
                 }
             }
 
+            // Get the projected tax taxRates
+            for (let t = 0; t < expectations.taxRates.length; t++) {
+                if (+(expectations.taxRates[t].startYear) === year) {
+                    taxRateTable = expectations.taxRates[t];
+                }
+            }
+
+
             // Figure the withdrawals before the increase. It's safer.
+            
+            // calculate withdrawal amount net of taxes
+            // TODO - don't tax amounts coming from Roth accounts
+            const grossExpenditures = calculateWithdrawal(taxRateTable, expenditures);
+
             // Cover expenditures from SS and Pension first, then withdraw with is necessary from accounts.
-            let withdrawal = expenditures - (pensionAmount + socialSecurityAmount);
+            let withdrawal = grossExpenditures - (pensionAmount + socialSecurityAmount);
+
+
             if (withdrawal < 0) {
                 // put any remaining amount into taxable investments.
                 // using a negative value so that we subtract a negative - adding to savings.
@@ -129,15 +178,22 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
             // Add one-time contributions / withdrawals
             for (let c = 0; c < plan.onetimeEvents.length; c++) {
-                if (plan.onetimeEvents[c].year === year) {
+                if (+(plan.onetimeEvents[c].year) === year) {
                     taxableStocks += plan.onetimeEvents[c].amountTaxable;
                     rothStocks += plan.onetimeEvents[c].amountRoth;
-                    taxDeferredStocks += plan.onetimeEvents[c].amountTaxdeferred;
+                    taxDeferredStocks += plan.onetimeEvents[c].amountTaxDeferred;
                 }
             }
 
             // TODO - calculate return on bonds and cash
-            const stockReturn = stockResults[returnIndex];
+            // Get inflation rate
+            for (let i = 0; i < expectations.inflationRates.length; i++) {
+                if (expectations.inflationRates[i].startYear === year) {
+                    inflationRate = expectations.inflationRates[i].rate;
+                }
+            }
+
+            const stockReturn = stockResults[returnIndex] - inflationRate;
             taxableStocks = taxableStocks * (1 + stockReturn);
             rothStocks = rothStocks * (1 + stockReturn);
             taxDeferredStocks = taxDeferredStocks * (1 + stockReturn);
