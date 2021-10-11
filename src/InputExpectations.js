@@ -14,21 +14,10 @@ function InputExpectations() {
             inflationRates: [
                 {
                     startYear: 2021,
-                    rate: .03
+                    rate: .0324
                 }
             ],
-            pensions: [
-                {
-                    owner: '',
-                    startYear: 2039,
-                    annualAmount: 13488,
-                    //inflationIncreases: 0,
-                    onDeath: {
-                        payout: 0,
-                        continuedPayment: 0
-                    }
-                }
-            ],
+            pensions: [],
             
             ssyear: 0,
             ssamount: 0,
@@ -81,6 +70,35 @@ function InputExpectations() {
 
     }, [state])
 
+    function handleAddPension() {
+        const startYear = document.getElementById("PensionStartYear").value;
+        const owner = document.getElementById("PensionOwner").value;
+        const description = document.getElementById("PensionDescription").value;
+        const amount = document.getElementById("PensionAmount").value === "" ? 0 : +document.getElementById("PensionAmount").value;
+
+        const newRow = {
+            startYear: +startYear,
+            owner: owner,
+            description: description,
+            amount: +amount
+        };
+        const pensions = state.pensions.concat(newRow).sort((first, second) => { return first.year > second.year });
+        setState({
+            ...state,
+            pensions:
+                pensions
+        });
+    };
+
+    function handleRemovePension(index) {
+        const pensions = JSON.parse(JSON.stringify(state.pensions)); // Deep Clone array
+        pensions.splice(index, 1).sort((first, second) => { return first.startYear + first.owner < second.startYear + second.owner });
+        setState({
+            ...state,
+            pensions: pensions
+        });
+    };
+
     return (
         <div id="InputExpectations" className="Input">
             <div id="SocialSecurity" className="Section-Body">
@@ -100,6 +118,46 @@ function InputExpectations() {
                             <label htmlFor="SSAmount_Partner" className="Field-label G1">Amount: </label><input type="number" onChange={e => setState({ ...state, ssamount_Partner: +(e.target.value) })} className="Field-value Currency G2" id="SSAmount_Partner" value={state.ssamount_Partner} />
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="Pensions" className="Section-Body">
+                <div className="Section-Label">Pensions</div>
+                <div className="Section-Instructions"></div>
+                <div className="Section-Subsection">
+                    <table id="Table-Pensions" className="FireData-Table">
+                        <thead>
+                            <tr>
+                                <th className="FireData-Table-Header">Start Year</th>
+                                <th className="FireData-Table-Header">Owner (self/partner)</th>
+                                <th className="FireData-Table-Header">Description</th>
+                                <th className="FireData-Table-Header">Amount</th>
+                                <th className="FireData-Table-Header">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {state.pensions.map(function (pension, index) {
+                                return (
+                                    <tr key={index}>
+                                        <td className="FireData-Table-Cell Year" >{pension.startYear}</td>
+                                        <td className="FireData-Table-Cell" >{pension.owner}</td>
+                                        <td className="FireData-Table-Cell" >{pension.description}</td>
+                                        <td className="FireData-Table-Cell Amount">{pension.amount.toLocaleString('en')}</td>
+                                        <td className="FireData-Table-Cell"><button id="btnRemovePension" onClick={() => handleRemovePension(index)}>Remove</button></td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th className="FireData-Table-Cell"><input type="year" id="PensionStartYear" /></th>
+                                <th className="FireData-Table-Cell Text"><input type="test" id="PensionOwner" /></th>
+                                <th className="FireData-Table-Cell Text"><input type="test" id="PensionDescription" /></th>
+                                <th className="FireData-Table-Cell Amount"><input type="number" id="PensionAmount" /></th>
+                                <th className="FireData-Table-Cell"><button id="btnAddPension" onClick={handleAddPension}>Add</button></th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>

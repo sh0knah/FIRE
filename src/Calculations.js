@@ -98,8 +98,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
             for (let p = 0; p < expectations.pensions.length; p++) {
                 if (+(expectations.pensions[p].startYear) === year) {
-                    pensionAmount += expectations.pensions[p].annualAmount;
-
+                    pensionAmount += expectations.pensions[p].amount;
                     // TODO - account for death scenarios
                 }
             }
