@@ -111,8 +111,10 @@ function modelResults(personal, currentAssets, plan, expectations) {
                 socialSecurityAmount += expectations.ssamount_Partner;
             }
             
+            // Todo - account for multiple retirement years.
             for (let s = 0; s < plan.expenditures.length; s++) {
-                if (+(plan.expenditures[s].year) === year) {
+                if (+(plan.expenditures[s].year) === year ||
+                        (+(plan.expenditures[s].year) === 0 && year === retirementYear_Self)) {
                     expenditures = plan.expenditures[s].expenses;
                 }
             }
@@ -185,7 +187,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             // TODO - calculate return on bonds and cash
-            
+
             // Get inflation rate
             // for (let i = 0; i < expectations.inflationRates.length; i++) {
             //     if (expectations.inflationRates[i].startYear === year) {
