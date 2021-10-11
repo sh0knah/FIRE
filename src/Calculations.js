@@ -50,14 +50,14 @@ function modelResults(personal, currentAssets, plan, expectations) {
         let socialSecurityAmount = 0;
         let overspend = 0;
 
+        let annualContributionsTaxable = 0;
+        let annualContributionsRoth = 0;
+        let annualContributionsTaxDeferred = 0;
+
         // TODO - ask the user if it's OK to "wrap around?" If not, what? Assume fixed rate of return? Randomize?
         for (let yearIdx = 0; yearIdx < planLength; yearIdx++) {
 
             let year = startYear + yearIdx;
-
-            // console.log("calculation year: " + year);
-            // console.log("historic return year: " + returnIndex + firstHistoryYear);
-            // console.log("historic return amount: " + stockResults[returnIndex]);
 
             if (returnIndex >= stockResults.length)
                 returnIndex = 0;
@@ -78,13 +78,11 @@ function modelResults(personal, currentAssets, plan, expectations) {
                 }
             }
 
-            if (year < expendituresYear) {
-                expenditures = 0; // No retirement expenditures yet.
+            for (let s = 0; s < plan.expenditures.length; s++) {
+                if (plan.expenditures[s].year === year) {
+                    expenditures = plan.expenditures[s].expenses;
+                }
             }
-            else if (year === expendituresYear) {
-                expenditures = plan.expendituresAmount; // Start expenditures at this amount.
-            }
-            // TODO - account for expenditure adjustments over time
 
             // Figure the withdrawals before the increase. It's safer.
             // Cover expenditures from SS and Pension first, then withdraw with is necessary from accounts.
@@ -96,7 +94,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
             else {
                 // TODO - determine order of withdrawals
-                // currently: empty taxable accounts first, then roth, then taxdeferred.
+                // currently: empty taxable accounts first, then roth, then tax deferred.
                 // should be: based on tax rules to minimize tax impact.
                 if (taxableStocks > withdrawal) {
                     taxableStocks -= withdrawal;
@@ -131,10 +129,10 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
             // Add one-time contributions / withdrawals
             for (let c = 0; c < plan.onetimeEvents.length; c++) {
-                if (plan.onetimeEvents[c].year == year) {
+                if (plan.onetimeEvents[c].year === year) {
                     taxableStocks += plan.onetimeEvents[c].amountTaxable;
                     rothStocks += plan.onetimeEvents[c].amountRoth;
-                    taxableStocks += plan.onetimeEvents[c].amountTaxable;
+                    taxDeferredStocks += plan.onetimeEvents[c].amountTaxdeferred;
                 }
             }
 
@@ -144,19 +142,28 @@ function modelResults(personal, currentAssets, plan, expectations) {
             rothStocks = rothStocks * (1 + stockReturn);
             taxDeferredStocks = taxDeferredStocks * (1 + stockReturn);
 
-            // taxableStocks_Partner = taxableStocks_Partner * (1 + stockReturn);
-            // rothStocks_Partner = rothStocks_Partner * (1 + stockReturn);
-            // taxDeferredStocks_Partner = taxDeferredStocks_Partner * (1 + stockReturn);
-
             // Assume contribution at the end of the year (after return is calculated)
-            // TODO - account for different retirement years for each person
-            // TODO - account for possibility that contributions are still being made after retirement
-            if (year < retirementYear_Self)
-            {
-                taxableStocks += plan.annualContributionsTaxable;
-                rothStocks += plan.annualContributionsRoth;
-                taxDeferredStocks += plan.annualContributionsTaxDeferred;
+            for (let c = 0; c < plan.annualContributions.length; c++) {
+                // Contributions starting this year
+                if (plan.annualContributions[c].startYear === year) {
+                    annualContributionsTaxable += plan.annualContributions[c].amountTaxable;
+                    annualContributionsRoth += plan.annualContributions[c].amountRoth;
+                    annualContributionsTaxDeferred += plan.annualContributions[c].amountTaxDeferred;
+                }
+
+                // Contributions ending this year
+                // TODO - account for owner of contribution and use correct retirement year to end
+                if (plan.annualContributions[c].endYear === year ||
+                        (plan.annualContributions[c].endYear === 0 && year === retirementYear_Self)) {
+                    annualContributionsTaxable -= plan.annualContributions[c].amountTaxable;
+                    annualContributionsRoth -= plan.annualContributions[c].amountRoth;
+                    annualContributionsTaxDeferred -= plan.annualContributions[c].amountTaxDeferred;
+                }
             }
+
+            taxableStocks += annualContributionsTaxable;
+            rothStocks += annualContributionsRoth;
+            taxDeferredStocks += annualContributionsTaxDeferred;
 
             iterationResults.push({ year: year, value: taxDeferredStocks + taxableStocks + rothStocks - overspend });
             returnIndex++;

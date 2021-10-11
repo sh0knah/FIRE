@@ -39,15 +39,36 @@ function InputExpectations() {
             ],
             taxRates: [
                 {
-                    startYear: null,
+                    startYear: 2021,
+                    deductions: 25100,
                     brackets: [
                         {
-                            earningsUpTo: 50000,
-                            rate: 0
+                            earningsUpTo: 19900,
+                            rate: .1
                         },
                         {
-                            earningsUpTo: 100000,
-                            rate: .2
+                            earningsUpTo: 81050,
+                            rate: .12
+                        },
+                        {
+                            earningsUpTo: 172750,
+                            rate: .22
+                        },
+                        {
+                            earningsUpTo: 329850,
+                            rate: .24
+                        },
+                        {
+                            earningsUpTo: 418850,
+                            rate: .32
+                        },
+                        {
+                            earningsUpTo: 628300,
+                            rate: .35
+                        },
+                        {
+                            earningsUpTo: 1000000000,
+                            rate: .37
                         }
                     ]
                 }
