@@ -57,9 +57,7 @@ function InputPlans() {
         events.splice(index, 1).sort((first, second) => { return first.year < second.year });
         setState({
             ...state,
-            onetimeEvents: {
-                events
-            }
+            onetimeEvents: events
         });
     };
 

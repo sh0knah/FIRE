@@ -11,12 +11,13 @@ function InputExpectations() {
         const initialValue = JSON.parse(saved);
         return initialValue ||
         {
-            inflationRates: [
-                {
-                    startYear: 2021,
-                    rate: .0324
-                }
-            ],
+            // inflationRates: [
+            //     {
+            //         startYear: 2021,
+            //         rate: .0324
+            //     }
+            // ],
+            inflationRate: 0.0324,
             pensions: [],
             
             ssyear: 0,
@@ -158,6 +159,20 @@ function InputExpectations() {
                             </tr>
                         </tfoot>
                     </table>
+                </div>
+            </div>
+
+            <div id="Inflation" className="Section-Body">
+                <div className="Section-Label">Rate of Inflation</div>
+                <div className="Section-Instructions"></div>
+                <div className="Section-Subsection">
+                    <div className="Section-Subsection Grid2">
+                        <div className="SubGrid2">
+                            {/* <label htmlFor="InflationYear" className="Field-label G1">Start year: </label><input type="number" onChange={e => setState({ ...state, inflationYear: +(e.target.value) })} className="Field-value Year G2" id="InflationYear" value={state.inflationYear} /> */}
+                            <label htmlFor="InflationRate" className="Field-label G1">Rate: </label><input type="number" onChange={e => setState({ ...state, inflationRate: +(e.target.value) })} className="Field-value Currency G2" id="InflationRate" value={state.inflationRate} />
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

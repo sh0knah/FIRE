@@ -9,7 +9,7 @@ function App() {
       <header className="App-header">
         <img src='./planner.png' className="App-logo" alt="logo" />
         <div className="App-title">
-          Fire Calculator
+          FIRE Calculator
         </div>
       </header>
       <div className="App-body">

@@ -185,12 +185,14 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             // TODO - calculate return on bonds and cash
+            
             // Get inflation rate
-            for (let i = 0; i < expectations.inflationRates.length; i++) {
-                if (expectations.inflationRates[i].startYear === year) {
-                    inflationRate = expectations.inflationRates[i].rate;
-                }
-            }
+            // for (let i = 0; i < expectations.inflationRates.length; i++) {
+            //     if (expectations.inflationRates[i].startYear === year) {
+            //         inflationRate = expectations.inflationRates[i].rate;
+            //     }
+            // }
+            inflationRate = expectations.inflationRate;
 
             const stockReturn = stockResults[returnIndex] - inflationRate;
             taxableStocks = taxableStocks * (1 + stockReturn);
