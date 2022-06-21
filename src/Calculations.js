@@ -68,7 +68,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
         var iterationResults = [];
 
-        // TODO - don't combine these yet. 
+        // TODO - don't combine these yet.
         //  Start with the value from the person who will be eligible for withdrawals first.
         //  Then add the other partner when they are eligible.
         let taxableStocks = startTaxableStocks + startTaxableStocks_Partner;
@@ -110,7 +110,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
             if (year === +(expectations.ssyear_Partner)) {
                 socialSecurityAmount += expectations.ssamount_Partner;
             }
-            
+
             // Todo - account for multiple retirement years.
             for (let s = 0; s < plan.expenditures.length; s++) {
                 if (+(plan.expenditures[s].year) === year ||
@@ -121,14 +121,15 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
             // Get the projected tax taxRates
             for (let t = 0; t < expectations.taxRates.length; t++) {
-                if (+(expectations.taxRates[t].startYear) === year) {
+                if (+(expectations.taxRates[t].startYear) === year ||
+                    (taxRateTable.length === 0 && +(expectations.taxRates[t].startYear) < year)) {
                     taxRateTable = expectations.taxRates[t];
                 }
             }
 
 
             // Figure the withdrawals before the increase. It's safer.
-            
+
             // calculate withdrawal amount net of taxes
             // TODO - don't tax amounts coming from Roth accounts
             const grossExpenditures = calculateWithdrawal(taxRateTable, expenditures);
