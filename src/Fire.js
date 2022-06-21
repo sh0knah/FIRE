@@ -8,6 +8,7 @@ import InputPersonal from './InputPersonal';
 import InputCurrentAssets from './InputCurrentAssets';
 import InputPlans from './InputPlans';
 import InputExpectations from './InputExpectations';
+import LoadSave from './LoadSave';
 import Results from './Results';
 
 
@@ -22,6 +23,7 @@ function Fire () {
                     <Tab>Plans</Tab>
                     <Tab>Expectations</Tab>
                     <Tab>Results</Tab>
+                    <Tab>Load/Save</Tab>
                 </TabList>
 
                 <TabPanel><InputPersonal /></TabPanel>
@@ -29,6 +31,7 @@ function Fire () {
                 <TabPanel><InputPlans /></TabPanel>
                 <TabPanel><InputExpectations/></TabPanel>
                 <TabPanel><Results/></TabPanel>
+                <TabPanel><LoadSave/></TabPanel>
             </Tabs>
         </div>
     </>;

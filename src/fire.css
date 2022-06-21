@@ -171,3 +171,7 @@ body {
 #Table-OnetimeContributions td:nth-child(1n+3) {
     width: 100px;
 }
+
+#LoadSave {
+    margin: 25px;
+}
