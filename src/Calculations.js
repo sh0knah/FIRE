@@ -59,7 +59,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
     const startTaxDeferredStocks_Partner = +currentAssets.taxDeferredStocks_Partner;
 
     const returnIndexStart = 1;
-    const numberOfIterations = 50;
+    const numberOfIterations = 107;
 
     let iterations = [];
     for (let i = 0; i < numberOfIterations; i++) {
