@@ -11,13 +11,24 @@ function InputExpectations() {
         const initialValue = JSON.parse(saved);
         return initialValue ||
         {
-            // inflationRates: [
-            //     {
-            //         startYear: 2021,
-            //         rate: .0324
-            //     }
-            // ],
-            inflationRate: 0.0324,
+            inflationRates: [
+                {
+                    startYear: 2021,
+                    description: "",
+                    rate: .0324
+                },
+                {
+                    startYear: 2022,
+                    description: "",
+                    rate: 0.09
+                },
+                {
+                    startYear: 2024,
+                    description: "",
+                    rate: 0.324
+                }
+            ],
+            // inflationRate: 0.0324,
             pensions: [],
             
             ssyear: 0,
@@ -91,12 +102,39 @@ function InputExpectations() {
         });
     };
 
+    function handleAddRate() {
+        const startYear = document.getElementById("RateStartYear").value;
+        const description = document.getElementById("RateDescription").value;
+        const rate = document.getElementById("RateRate").value === "" ? 0 : +document.getElementById("RateRate").value;
+
+        const newRow = {
+            startYear: +startYear,
+            description: description,
+            rate: +rate
+        };
+        const rates = state.inflationRates.concat(newRow).sort((first, second) => { return first.year > second.year });
+        setState({
+            ...state,
+            inflationRates:
+                rates
+        });
+    };
+
     function handleRemovePension(index) {
         const pensions = JSON.parse(JSON.stringify(state.pensions)); // Deep Clone array
         pensions.splice(index, 1).sort((first, second) => { return first.startYear + first.owner < second.startYear + second.owner });
         setState({
             ...state,
             pensions: pensions
+        });
+    };
+
+    function handleRemoveRate(index) {
+        const rates = JSON.parse(JSON.stringify(state.inflationRates)); // Deep Clone array
+        rates.splice(index, 1).sort((first, second) => { return first.startYear < second.startYear });
+        setState({
+            ...state,
+            inflationRates: rates
         });
     };
 
@@ -163,18 +201,42 @@ function InputExpectations() {
             </div>
 
             <div id="Inflation" className="Section-Body">
-                <div className="Section-Label">Rate of Inflation</div>
+                <div className="Section-Label">Inflation</div>
                 <div className="Section-Instructions"></div>
                 <div className="Section-Subsection">
-                    <div className="Section-Subsection Grid2">
-                        <div className="SubGrid2">
-                            {/* <label htmlFor="InflationYear" className="Field-label G1">Start year: </label><input type="number" onChange={e => setState({ ...state, inflationYear: +(e.target.value) })} className="Field-value Year G2" id="InflationYear" value={state.inflationYear} /> */}
-                            <label htmlFor="InflationRate" className="Field-label G1">Rate: </label><input type="number" onChange={e => setState({ ...state, inflationRate: +(e.target.value) })} className="Field-value Currency G2" id="InflationRate" value={state.inflationRate} />
-                        </div>
-
-                    </div>
+                    <table id="Table-Inflation" className="FireData-Table">
+                        <thead>
+                            <tr>
+                                <th className="FireData-Table-Header">Start Year</th>
+                                <th className="FireData-Table-Header">Description</th>
+                                <th className="FireData-Table-Header">Rate</th>
+                                <th className="FireData-Table-Header">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {state.inflationRates.map(function (rate, index) {
+                                return (
+                                    <tr key={index}>
+                                        <td className="FireData-Table-Cell Year" >{rate.startYear}</td>
+                                        <td className="FireData-Table-Cell" >{rate.description}</td>
+                                        <td className="FireData-Table-Cell" >{rate.rate}</td>
+                                        <td className="FireData-Table-Cell"><button id="btnRemoveRate" onClick={() => handleRemoveRate(index)}>Remove</button></td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th className="FireData-Table-Cell"><input type="year" id="RateStartYear" /></th>
+                                <th className="FireData-Table-Cell Text"><input type="test" id="RateDescription" /></th>
+                                <th className="FireData-Table-Cell Text"><input type="test" id="RateRate" /></th>
+                                <th className="FireData-Table-Cell"><button id="btnAddRate" onClick={handleAddRate}>Add</button></th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
+        
         </div>
     )
 }

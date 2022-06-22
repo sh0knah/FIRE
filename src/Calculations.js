@@ -59,7 +59,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
     const startTaxDeferredStocks_Partner = +currentAssets.taxDeferredStocks_Partner;
 
     const returnIndexStart = 1;
-    const numberOfIterations = 107;
+    const numberOfIterations = numHistoryYears;
 
     let iterations = [];
     for (let i = 0; i < numberOfIterations; i++) {
@@ -188,14 +188,14 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             // TODO - calculate return on bonds and cash
-
+            debugger;
             // Get inflation rate
-            // for (let i = 0; i < expectations.inflationRates.length; i++) {
-            //     if (expectations.inflationRates[i].startYear === year) {
-            //         inflationRate = expectations.inflationRates[i].rate;
-            //     }
-            // }
-            inflationRate = expectations.inflationRate;
+            for (let i = 0; i < expectations.inflationRates.length; i++) {
+                if (expectations.inflationRates[i].startYear === year) {
+                    inflationRate = expectations.inflationRates[i].rate;
+                }
+            }
+            // inflationRate = expectations.inflationRate;
 
             const stockReturn = stockResults[returnIndex] - inflationRate;
             taxableStocks = taxableStocks * (1 + stockReturn);
@@ -235,7 +235,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
     return iterations;
 }
 
-const firstHistoryYear = 1915;
+//const firstHistoryYear = 1915;
 const numHistoryYears = 107;
 const stockResults = [ // 1915-2021
     0.8149,
