@@ -19,8 +19,8 @@ function LoadSave() {
         plan.currentAssets = localStorage.getItem('CurrentAssets');
         plan.expectations = localStorage.getItem('Expectations');
         plan.plans = localStorage.getItem('Plans');
-
-        download(JSON.stringify(plan), "FIRE Plan.json", "text/json");
+        var fileName = document.getElementById("PlanName").value + ".json";
+        download(JSON.stringify(plan), fileName, "text/json");
     }
 
     useEffect(() => {
@@ -28,7 +28,6 @@ function LoadSave() {
         fileSelector.addEventListener('change', (event) => {
             const fileList = event.target.files;
             loadFile(fileList[0]);
-            //console.log(fileList);
         });
     });
 
@@ -40,16 +39,9 @@ function LoadSave() {
             localStorage.setItem('CurrentAssets', plan.currentAssets);
             localStorage.setItem('Expectations', plan.expectations);
             localStorage.setItem('Plans', plan.plans);
-            alert('loaded');
+            window.location.reload();
         });
         reader.readAsText(file);
-
-        // fetch("FIRE Plan.json")
-        //     //.then(response => response.json())
-        //     .then(response => eval(response.json()))
-        //     .then(json => //console.log(json.personal)
-        //          localStorage.setItem('Personal', json.Personal)
-        //     );
     }
 
     return (
@@ -62,7 +54,7 @@ function LoadSave() {
             <br/><br/>
             <fieldset>
                 <legend>Load a plan from a file</legend>
-                <input type="file" id="file-selector" multiple></input>
+                <input type="file" id="file-selector"></input>
             </fieldset>
         </div>
     )
