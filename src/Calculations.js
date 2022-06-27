@@ -89,6 +89,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
         let taxRateTable = [];
 
         // TODO - ask the user if it's OK to "wrap around?" If not, what? Assume fixed rate of return? Randomize?
+        // TODO - ask the user how many iterations to use (default to the same as the number of historic returns we have)
         for (let yearIdx = 0; yearIdx < planLength; yearIdx++) {
 
             let year = startYear + yearIdx;
@@ -131,7 +132,8 @@ function modelResults(personal, currentAssets, plan, expectations) {
             // Figure the withdrawals before the increase. It's safer.
 
             // calculate withdrawal amount net of taxes
-            // TODO - don't tax amounts coming from Roth accounts
+            // TODO - don't tax amounts coming from Roth accounts (https://www.kiplinger.com/retirement/social-security/604321/taxes-on-social-security-benefits)
+            // TODO - account for state/local taxes
             const grossExpenditures = calculateWithdrawal(taxRateTable, expenditures);
 
             // Cover expenditures from SS and Pension first, then withdraw with is necessary from accounts.
@@ -188,7 +190,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
             }
 
             // TODO - calculate return on bonds and cash
-            debugger;
+
             // Get inflation rate
             for (let i = 0; i < expectations.inflationRates.length; i++) {
                 if (expectations.inflationRates[i].startYear === year) {
