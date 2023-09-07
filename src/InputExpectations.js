@@ -25,17 +25,18 @@ function InputExpectations() {
                 {
                     startYear: 2024,
                     description: "",
-                    rate: 0.324
+                    rate: 0.0324
                 }
             ],
             // inflationRate: 0.0324,
             pensions: [],
-            
+
             ssyear: 0,
             ssamount: 0,
             ssyear_Partner: 0,
             ssamount_Partner: 0,
-            
+            ssaExpectedPercentage: 1,
+
             taxRates: [
                 {
                     startYear: 2021,
@@ -149,6 +150,7 @@ function InputExpectations() {
                             <label htmlFor="Name" className="Field-label G1">Self </label>
                             <label htmlFor="SSYear" className="Field-label G1">Start payments (year): </label><input type="number" onChange={e => setState({ ...state, ssyear: +(e.target.value) })} className="Field-value Year G2" id="SSYear" value={state.ssyear} />
                             <label htmlFor="SSAmount" className="Field-label G1">Amount: </label><input type="number" onChange={e => setState({ ...state, ssamount: +(e.target.value) })} className="Field-value Currency G2" id="SSAmount" value={state.ssamount} />
+                            <label htmlFor="SSAPercentage" className="Field-label G1">Percentage Expected: </label><input type="number" onChange={e => setState({ ...state, ssaExpectedPercentage: +(e.target.value) })} className="Field-value Currency G2" id="SSAExpectedPercentage" value={state.ssaExpectedPercentage} />
                         </div>
 
                         <div className="SubGrid2">
@@ -236,10 +238,9 @@ function InputExpectations() {
                     </table>
                 </div>
             </div>
-        
+
         </div>
     )
 }
 
 export default InputExpectations
-

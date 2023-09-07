@@ -106,10 +106,10 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
             // TODO - account for death scenarios
             if (year === +(expectations.ssyear)) {
-                socialSecurityAmount += expectations.ssamount;
+                socialSecurityAmount += (expectations.ssamount * ((expectations.ssaExpectedPercentage / 100) ?? 1));
             }
             if (year === +(expectations.ssyear_Partner)) {
-                socialSecurityAmount += expectations.ssamount_Partner;
+                socialSecurityAmount += (expectations.ssamount_Partner * ((expectations.ssaExpectedPercentage / 100) ?? 1));
             }
 
             // Todo - account for multiple retirement years.
