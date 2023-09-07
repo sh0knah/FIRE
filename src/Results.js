@@ -87,7 +87,7 @@ function Results() {
                 owner: '',
                 startYear: null,
                 amount: 0,
-                expectedPercentage: 1 // use percentage to indicate expected payout reductions
+                expectedPercentage: 1 // TODO - use percentage to indicate expected payout reductions
             }
         ],
         taxRates: [
@@ -186,4 +186,3 @@ function Results() {
 }
 
 export default Results
-
