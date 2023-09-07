@@ -106,7 +106,7 @@ function InputPlans() {
             description: description,
             expenses: +expenses
         };
-        const expenditures = state.expenditures.concat(newRow).sort((first, second) => { return first.year > second.year });
+        const expenditures = state.expenditures.concat(newRow).sort((first, second) => { return first.year - second.year });
         setState({
             ...state,
             expenditures:
@@ -116,7 +116,7 @@ function InputPlans() {
 
     function handleRemoveExpenses(index) {
         const expenses = JSON.parse(JSON.stringify(state.expenditures)); // Deep Clone array
-        expenses.splice(index, 1).sort((first, second) => { return first.year + first.owner < second.year + second.owner });
+        expenses.splice(index, 1).sort((first, second) => { return first.year - second.year });
         setState({
             ...state,
             expenditures: expenses
@@ -260,4 +260,3 @@ function InputPlans() {
 }
 
 export default InputPlans
-
