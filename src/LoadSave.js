@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './fire.css';
-var fs = require("fs");
 
 
 function LoadSave() {

@@ -66,7 +66,7 @@ function modelResults(personal, currentAssets, plan, expectations) {
 
         let returnIndex = returnIndexStart + i; // Go through a different set of years each time
 
-        var iterationResults = [];
+        let iterationResults = [];
 
         // TODO - don't combine these yet.
         //  Start with the value from the person who will be eligible for withdrawals first.
@@ -103,6 +103,9 @@ function modelResults(personal, currentAssets, plan, expectations) {
                     // TODO - account for death scenarios
                 }
             }
+
+            if (expectations.ssaExpectedPercentage === "undefined")
+                expectations.ssaExpectedPercentage = 100;
 
             // TODO - account for death scenarios
             if (year === +(expectations.ssyear)) {
